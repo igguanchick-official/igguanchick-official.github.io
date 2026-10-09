@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>English: контрольные</title>
 <style>
 :root{--bg:#EEF2F8;--ink:#14213D;--muted:#5B6A85;--card:#FFFFFF;--line:#D5DDEB;--accent:#2F5BEA;--onaccent:#fff;--ok:#0F7A57;--okbg:#D9F2E8;--again:#8A5200;--againbg:#FBE9C6;--serif:"Iowan Old Style","Palatino Linotype",Georgia,serif;--sans:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
