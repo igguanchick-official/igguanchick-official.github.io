@@ -260,28 +260,64 @@ function pickOpts(c,toRu,diff){
   for(var i=0;i<ranked.length&&out.length<3;i++){var t=txt(ranked[i]);if(!seen[t]){seen[t]=1;out.push(ranked[i])}}
   return out;
 }
+var SEM=[
+{t:"люди и профессии",w:"colleague adviser supervisor groupmate lecturer receptionist porter bellboy waiter waitress manager seller customer doctor surgeon physician specialist consultant butler",n:"staff degree course reception hotel department"},
+{t:"действия при телефонном разговоре",w:"dial answer ring speak recall switch",n:"message number extension receiver phone line"},
+{t:"предметы и понятия, связанные с телефоном",w:"message number extension receiver code phone line appointment",n:"dial ring answer speak"},
+{t:"виды поездок и путешествий",w:"journey trip voyage cruise tour excursion outing expedition crossing",n:"flight ticket luggage holiday"},
+{t:"места и части аэропорта и вокзала",w:"gate platform compartment customs",n:"ticket journey trip"},
+{t:"деньги и оплата",w:"deposit bill cost extras gratuities account fare price cash change",n:"receipt guarantee warranty reservation"},
+{t:"скидки и выгодные цены",w:"discount reduction bargain deal steal offer sale",n:"refund guarantee receipt"},
+{t:"одежда и обувь",w:"shirts dresses trousers jackets boots flats sunglasses belts",n:"bags pens notebooks jewellery"},
+{t:"магазины и места, куда ходят за покупками",w:"baker's butcher's chemist's deli florist's greengrocer's hairdresser's jeweller's launderette newsagent's optician's stationer's bank",n:"shopping customer sale stock cash"},
+{t:"канцелярские товары",w:"pens notebooks paper stationery",n:"books bags furniture"},
+{t:"виды боли",w:"headache toothache earache backache stomachache",n:"fever cough rash sneeze"},
+{t:"болезни",w:"flu cold pneumonia fever infection virus disease illness",n:"medicine remedy symptom patient doctor"},
+{t:"лекарства и перевязочные материалы",w:"tablet pill syrup ointment antibiotics painkiller medicine drug plaster bandage",n:"prescription patient doctor"},
+{t:"виды нетрадиционной медицины",w:"homeopathy osteopathy aromatherapy chiropractic reflexology hypnotherapy acupuncture",n:"medicine remedy drug"},
+{t:"приёмы пищи",w:"meal breakfast brunch elevenses",n:"menu dish dessert restaurant food"},
+{t:"блюда и части меню",w:"starter dessert entree appetiser dish specials specialty",n:"meal menu cuisine food cutlery"},
+{t:"способы приготовления еды",w:"boil grill fry",n:"order check dressing"},
+{t:"оборудование в номере и здании отеля",w:"shower tap minibar refrigerator elevator lift",n:"reception deposit check-in occupancy"},
+{t:"виды жилья для ночлега",w:"hotel motel couchsurfing accommodation",n:"reservation deposit taxi"},
+{t:"действия при покупке",w:"buy pay sell return offer complain",n:"receipt refund price"},
+{t:"симптомы и реакции организма",w:"cough sneeze nausea vomiting rash dizzy giddy faint sniff breathe",n:"illness cure remedy antibiotics"},
+{t:"врачи",w:"doctor surgeon physician specialist consultant",n:"patient"}
+].map(function(g){return {t:g.t,w:g.w.split(" "),n:g.n.split(" ")}});
+var swMap=null;
+function sw(w){if(!swMap){swMap={};cards.forEach(function(c){var k=c.w.toLowerCase();if(single(c)&&!swMap[k])swMap[k]=c})}return swMap[String(w).toLowerCase()]}
+function oddSem(diff,used){
+  var base=selCards().filter(single),have={};base.forEach(function(c){have[c.w.toLowerCase()]=1});
+  var gs=SEM.filter(function(g){return g.w.filter(function(w){return have[w.toLowerCase()]&&sw(w)}).length>=3});
+  if(diff===2)gs=gs.filter(function(g){return g.n.filter(sw).length});
+  if(!gs.length)return null;
+  for(var t=0;t<40;t++){
+    var g=pick(gs),mine=g.w.filter(function(w){return have[w.toLowerCase()]&&sw(w)}),o;
+    if(diff===2){var nn=g.n.filter(sw);if(!nn.length)continue;o=sw(pick(nn))}
+    else{var og=SEM.filter(function(x){return x!==g&&x.t!==g.t});var g2=pick(og);var pool=g2.w.filter(function(w){return sw(w)&&g.w.indexOf(w)<0&&g.n.indexOf(w)<0});if(!pool.length)continue;o=sw(pick(pool))}
+    var trio=shuf(mine).slice(0,3).map(sw);if(trio.some(function(c){return c.w===o.w}))continue;
+    var all=shuf(trio.concat([o])),key=all.map(function(x){return x.w}).sort().join("|");
+    if(used[key])continue;used[key]=1;
+    return {cap:"Лишнее слово",q:"Какое слово лишнее по смыслу?",opts:all.map(function(x){return x.w}),ans:all.indexOf(o),
+      exp:o.w+" ("+o.ru+") — не относится к группе «"+g.t+"», остальные три слова относятся.",why:all.map(function(x){return x.w+" — "+x.ru})};
+  }
+  return null;
+}
 function oddQ(diff,used){
+  if(Math.random()<.5){var r=oddSem(diff,used);if(r)return r}
   var base=selCards().filter(single);
   for(var t=0;t<80;t++){
     var u=pick(uniq(base.map(function(c){return c.u})));if(u===undefined)return null;
-    var same=base.filter(function(c){return c.u===u});var o,g,exp;
-    if(diff===1){
-      if(same.length<3)continue;
-      var others=cards.filter(function(c){return single(c)&&c.u!==u&&!same.some(function(x){return x.w===c.w})});if(!others.length)continue;
-      o=pick(others);g=shuf(same).slice(0,3);
-      exp=o.w+" ("+o.ru+") — из темы «"+UNITS[o.u]+"», остальные слова — из темы «"+UNITS[u]+"».";
-    }else{
-      var s=pick(uniq(same.map(function(c){return c.s})));var grp=same.filter(function(c){return c.s===s});
-      var oth=cards.filter(function(c){return single(c)&&c.u===u&&c.s!==s&&!grp.some(function(x){return x.w===c.w})});
-      if(grp.length<3||!oth.length)continue;
-      o=pick(oth);g=shuf(grp).slice(0,3);
-      exp=o.w+" ("+o.ru+") — из подтемы «"+SUBN[u][o.s]+"», остальные слова — из подтемы «"+SUBN[u][s]+"».";
-    }
-    if(used[o.w])continue;used[o.w]=1;
-    var all=shuf(g.concat([o]));
-    return {cap:"Лишнее слово",q:diff===1?"Какое слово из другой темы?":"Какое слово из другой подтемы?",opts:all.map(function(x){return x.w}),ans:all.indexOf(o),exp:exp,why:all.map(function(x){return x.w+" — "+x.ru})};
+    var same=base.filter(function(c){return c.u===u});
+    if(same.length<3)continue;
+    var others=cards.filter(function(c){return single(c)&&c.u!==u&&!same.some(function(x){return x.w===c.w})});if(!others.length)continue;
+    var o=pick(others),g=shuf(same).slice(0,3);
+    var all=shuf(g.concat([o])),key=all.map(function(x){return x.w}).sort().join("|");
+    if(used[key])continue;used[key]=1;
+    return {cap:"Лишнее слово",q:"Какое слово из другой темы?",opts:all.map(function(x){return x.w}),ans:all.indexOf(o),
+      exp:o.w+" ("+o.ru+") — из темы «"+UNITS[o.u]+"», остальные слова — из темы «"+UNITS[u]+"».",why:all.map(function(x){return x.w+" — "+x.ru})};
   }
-  return null;
+  return oddSem(diff,used);
 }
 function vMake(mode,b,diff,used){
   if(mode==="odd")return oddQ(diff,used);
