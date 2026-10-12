@@ -1,5 +1,5 @@
 /* Меню English(beta): кнопка ☰ и боковая панель слева */
-.tbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:flex-start;gap:12px;margin:0 0 12px;padding:10px 0;background:var(--bg);border-bottom:1px solid var(--line)}
+.tbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:flex-start;gap:12px;margin:0 0 12px;padding:10px 0;background:transparent;border-bottom:1px solid var(--line)}
 .tbl{font:600 18px/1.2 var(--serif);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .burger,.dx,.dt{flex:none;width:44px;height:44px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:16px;cursor:pointer}
 .burger svg{width:22px;height:22px;stroke:currentColor}
