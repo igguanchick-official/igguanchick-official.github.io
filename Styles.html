@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>English: оформление</title>
+<link rel="stylesheet" href="style.css"><link rel="stylesheet" href="themes.css">
+<script>try{var _p=localStorage.getItem("ce_palette");if(_p)document.documentElement.setAttribute("data-palette",_p)}catch(e){}try{var _f=localStorage.getItem("ce_font"),_z=localStorage.getItem("ce_size");if(_f&&_f!=="sys")document.documentElement.setAttribute("data-font",_f);if(_z&&_z!=="m")document.documentElement.setAttribute("data-size",_z)}catch(e){}</script>
+</head><body><div class="app">
+<div class="top"><h1>Оформление</h1><a class="chip" href="English.html" title="English.html">← English</a></div>
+<div class="themebar"><button id="thbtn" hidden></button><div class="chips" id="thpanel"></div><div class="chips" id="fspanel"></div></div>
+<h2 class="rh">Пример</h2><div class="rule"><b>Present Perfect</b><p>recent action with a visible result</p><p class="m">Signal words: just, already, yet</p><p class="ex">He has cut the grass.</p></div>
+<div class="note">Выбор сохраняется в браузере и применяется в English.html.</div>
+</div>
+<script>(function(){(function(){
+var P=[["sky", "Голубая", "l", "#EEF2F8", "#2F5BEA"], ["mint", "Мята", "l", "#EAF5F0", "#1E8E6E"], ["lav", "Лаванда", "l", "#F2EFFA", "#6C4DD8"], ["sand", "Песок", "l", "#F7F2E8", "#9A4A1B"], ["night", "Ночь", "d", "#0E1626", "#7FA2FF"], ["graphite", "Графит", "d", "#141414", "#8AB4F8"], ["forest", "Лес", "d", "#0F1A16", "#5ED2A6"], ["plum", "Слива", "d", "#1A1226", "#B79CFF"], ["amoled", "AMOLED", "d", "#000000", "#7FA2FF"],["neon", "Neon Green", "n", "#0B0B0B", "#39FF14"], ["crimson", "Crimson", "n", "#1A1A1A", "#C81E4D"], ["elpurple", "Electric Purple", "n", "#00120B", "#C200FB"], ["magteal", "Magenta × Teal", "n", "#0B0614", "#FF00FF"], ["limeberry", "Lime × Berry", "n", "#12060E", "#22FF7B"], ["pinkacid", "Pink × Acid", "n", "#100A0D", "#9EFF00"],["crimart","Lilith","c","#1A1A1A","#D92B5C"]],KEY="ce_palette",cur="auto";
+try{cur=localStorage.getItem(KEY)||"auto"}catch(e){}
+var panel=document.getElementById("thpanel"),btn=document.getElementById("thbtn");
+function chip(id,name,bg,ac){return '<button class="chip" data-p="'+id+'" aria-pressed="'+(cur===id)+'">'+(bg?'<i class="sw" style="background:'+bg+';border-color:'+ac+'"></i>':"")+name+"</button>"}
+function ui(){panel.innerHTML='<div class="tgrp">Авто</div>'+chip("auto","По системе")+'<div class="tgrp">Светлые</div>'+P.filter(function(p){return p[2]==="l"}).map(function(p){return chip(p[0],p[1],p[3],p[4])}).join("")+'<div class="tgrp">Тёмные</div>'+P.filter(function(p){return p[2]==="d"}).map(function(p){return chip(p[0],p[1],p[3],p[4])}).join("")+'<div class="tgrp">Неон</div>'+P.filter(function(p){return p[2]==="n"}).map(function(p){return chip(p[0],p[1],p[3],p[4])}).join("")+'<div class="tgrp">Кастомные</div>'+P.filter(function(p){return p[2]==="c"}).map(function(p){return chip(p[0],p[1],p[3],p[4])}).join("")}
+function apply(id){cur=id;var r=document.documentElement;if(id==="auto")r.removeAttribute("data-palette");else r.setAttribute("data-palette",id);try{localStorage.setItem(KEY,id)}catch(e){}ui()}
+panel.onclick=function(e){var b=e.target.closest(".chip");if(b)apply(b.getAttribute("data-p"))};
+btn.onclick=function(){panel.hidden=!panel.hidden;document.getElementById("fspanel").hidden=panel.hidden;btn.setAttribute("aria-expanded",String(!panel.hidden))};
+ui();
+})();})();</script>
+<script>(function(){(function(){
+var F=[["sys","Системный"],["serif","С засечками"],["mono","Моно"],["kurale","Kurale"],["goth","Готика"]],S=[["s","A−"],["m","A"],["l","A+"],["xl","A++"]],f="sys",z="m";
+try{f=localStorage.getItem("ce_font")||"sys";z=localStorage.getItem("ce_size")||"m"}catch(e){}
+var el=document.getElementById("fspanel");
+function ui(){el.innerHTML='<div class="tgrp">Шрифт</div>'+F.map(function(x){return '<button class="chip" data-f="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>'}).join("")+'<div class="tgrp">Размер</div>'+S.map(function(x){return '<button class="chip" data-z="'+x[0]+'" aria-pressed="'+(z===x[0])+'">'+x[1]+'</button>'}).join("")}
+function apply(){var r=document.documentElement;if(f==="sys")r.removeAttribute("data-font");else r.setAttribute("data-font",f);if(z==="m")r.removeAttribute("data-size");else r.setAttribute("data-size",z);try{localStorage.setItem("ce_font",f);localStorage.setItem("ce_size",z)}catch(e){}ui()}
+el.onclick=function(e){var b=e.target.closest(".chip");if(!b)return;if(b.getAttribute("data-f"))f=b.getAttribute("data-f");else z=b.getAttribute("data-z");apply()};
+ui();
+})();})();</script>
+</body></html>
