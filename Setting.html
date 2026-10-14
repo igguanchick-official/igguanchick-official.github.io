@@ -11,6 +11,7 @@
 <div class="chips" style="margin:12px 0"><button class="chip" aria-pressed="false">Кнопка</button><button class="chip" aria-pressed="true">Выбрано</button></div>
 <button class="go wide" type="button">Главная кнопка</button>
 <div class="note" style="margin-top:14px">Выбор сохраняется в браузере и применяется на всех страницах.</div>
+<div class="ver">v1.4</div>
 </div>
 <script>(function(){(function(){
 var P=[["sky", "Голубая", "l", "#EEF2F8", "#2F5BEA"], ["mint", "Мята", "l", "#EAF5F0", "#1E8E6E"], ["lav", "Лаванда", "l", "#F2EFFA", "#6C4DD8"], ["sand", "Песок", "l", "#F7F2E8", "#9A4A1B"], ["night", "Ночь", "d", "#0E1626", "#7FA2FF"], ["graphite", "Графит", "d", "#141414", "#8AB4F8"], ["forest", "Лес", "d", "#0F1A16", "#5ED2A6"], ["plum", "Слива", "d", "#1A1226", "#B79CFF"], ["amoled", "AMOLED", "d", "#000000", "#7FA2FF"],["neon", "Neon Green", "n", "#0B0B0B", "#39FF14"], ["crimson", "Crimson", "n", "#1A1A1A", "#C81E4D"], ["elpurple", "Electric Purple", "n", "#00120B", "#C200FB"], ["magteal", "Magenta × Teal", "n", "#0B0614", "#FF00FF"], ["limeberry", "Lime × Berry", "n", "#12060E", "#22FF7B"], ["pinkacid", "Pink × Acid", "n", "#100A0D", "#9EFF00"],["crimart","Lilith","c","#1A1A1A","#D92B5C"]],KEY="ce_palette",cur="auto";
@@ -34,10 +35,10 @@ ui();
 })();})();</script>
 <script>
 /* Меню слева для страниц «Настройки» и «История изменений».
-   Пункты английского открывают English(beta).html сразу нужным разделом (#раздел:режим).
-   Названия заданий дублируют те, что в English(beta).html. */
+   Пункты английского открывают English.html сразу нужным разделом (#раздел:режим).
+   Названия заданий дублируют те, что в English.html. */
 (function(){
-  var TARGET="English(beta).html";
+  var TARGET="English.html";
   var PAGE=document.body.getAttribute("data-page")||"";
   var EN=[
     {sec:"vocab",name:"Лексика",root:"words",subs:[["cards","Карточки"],["form","Форма слова"],["gapopt","Вставь слово"],["gap","Впиши слово"],["odd","Лишнее"]]},
@@ -56,7 +57,7 @@ ui();
     g.subs.forEach(function(s){h+=a(TARGET+"#"+g.sec+":"+s[0],s[1],"sub")});
     h+='</div>';
   });
-  h+=a(TARGET+"#plan:","План")+'</nav>';
+  h+=a(TARGET+"#plan:","План")+a(TARGET+"#kr:","Контрольная")+'</nav>';
   var scrim=document.createElement("div");scrim.className="scrim";
   var dr=document.createElement("aside");dr.className="drawer";dr.id="drawer";dr.setAttribute("role","dialog");dr.setAttribute("aria-modal","true");dr.setAttribute("aria-label","Меню");dr.setAttribute("aria-hidden","true");dr.innerHTML=h;
   document.body.insertBefore(dr,document.body.firstChild);document.body.insertBefore(scrim,dr);
